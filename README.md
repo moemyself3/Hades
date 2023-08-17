@@ -1,5 +1,3 @@
-[![Documentation Status](https://readthedocs.org/projects/plouton/badge/?version=latest)](https://plouton.readthedocs.io/en/latest/?badge=latest)
-
 # Hades
 
 **HADES** is an astronomical image reduction and photometry toolbox.
