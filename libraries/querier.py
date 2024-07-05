@@ -3,6 +3,8 @@ Querier class
 
 """
 
+from config import Configuration
+
 from astropy import units as u
 from astropy.coordinates import SkyCoord
 from astropy.io import ascii
@@ -100,8 +102,8 @@ class Querier:
 	@staticmethod
 	def query_gaia_cone(ra, dec, radius):
 
-		pprint("Submitting Gaia cone search")
-		Gaia.MAIN_GAIA_TABLE = "gaiadr2.gaia_source"
+		print("Submitting Gaia cone search")
+		Gaia.MAIN_GAIA_TABLE = "gaiadr3.gaia_source"
 		Gaia.ROW_LIMIT = -1
 
 		ra = str(ra)
@@ -109,7 +111,11 @@ class Querier:
 
 		search_coord = SkyCoord(ra, dec, unit=(u.deg, u.deg), frame="fk5")
 		search_radius = u.Quantity(radius, u.deg)
-		search = Gaia.cone_search_async(search_coord, search_radius)
+
+		print(search_coord)
+		print(search_radius)
+
+		search = Gaia.cone_search_async(search_coord, radius=search_radius)
 
 		table = search.get_results()
 

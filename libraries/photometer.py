@@ -3,6 +3,8 @@ Photometer class
 
 """
 
+from config import Configuration
+
 from astropy.coordinates import EarthLocation, SkyCoord
 from astropy.io import fits
 from astropy.stats import sigma_clipped_stats
@@ -14,9 +16,9 @@ from photutils.aperture import aperture_photometry, CircularAnnulus, CircularApe
 
 import math
 
-from lib.calculator import *
-from lib.plotter import *
-from lib.reducer import *
+from libraries.calculator import *
+from libraries.plotter import *
+from libraries.reducer import *
 
 calculator = Calculator()
 plotter = Plotter()
@@ -57,15 +59,13 @@ class Photometer:
 
 		wcs = WCS(frame_header)
 
-		sigma = 3.0
-
 		mask, boxes = reducer.make_mask(object_frame)
 
 		print("Extracting sources (\u03B1, \u03B4) for", object_frame)
-		mean, median, std = sigma_clipped_stats(frame_data, mask=mask, sigma=sigma)
+		mean, median, std = sigma_clipped_stats(frame_data, mask=mask, sigma=Configuration.SIGMA_BKG)
 
 		fwhm = 6.0
-		threshold = 5.*std
+		threshold = Configuration.SIGMA_SRC * std
 
 		daofind = DAOStarFinder(fwhm=fwhm, threshold=threshold)
 		table = daofind(frame_data, mask=mask)
@@ -94,63 +94,63 @@ class Photometer:
 	@staticmethod
 	def match_catalogs(source_table, query_table):
 
-		print("Matching catalogs")
-		coo_source = SkyCoord(source_table["ra"]*u.deg, source_table["dec"]*u.deg)
-		coo_query = SkyCoord(query_table["raMean"]*u.deg, query_table["decMean"]*u.deg)
+		print('Matching catalogs')
+		coo_source = SkyCoord(source_table['ra']*u.deg, source_table['dec']*u.deg)
+
+		if (Configuration.CATALOG == 'gaia-cone') or (Configuration.CATALOG == 'gaia-square'):
+			coo_query = SkyCoord(query_table['ra'], query_table['dec'])
+
+		elif (Configuration.CATALOG == 'ps1'):
+			coo_query = SkyCoord(query_table['raMean']*u.deg, query_table['decMean']*u.deg)
 
 		idx, d2d, d3d = coo_query.match_to_catalog_sky(coo_source)
 
 		t = d2d < 1*u.arcsec
 
-		query_table["sep_flag"] = t
-		query_table["idx"] = idx
+		query_table['sep_flag'] = t
+		query_table['idx'] = idx
 
 		ct = query_table.dtype
 		names, dtypes = zip(*ct.descr)
 		match_table = Table(names=names, dtype=dtypes)
 
-		for row, sep_flag in enumerate(query_table["sep_flag"]):
+		for row, sep_flag in enumerate(query_table['sep_flag']):
 			if sep_flag:
 				match_table.add_row(query_table[row].as_void())
 
 		return match_table
 
 	@staticmethod
-	def photometry_field(object_frame, match_table, c_f1, c_f2, p_f1, p_f2, survey="ps1"):
+	def photometry_field(object_frame, match_table, survey='gaia'):
 
-		print("Performing photometery on", object_frame)
+		print('Performing photometery on', object_frame)
 		object_name = object_frame[:-4]
 		frame = fits.open(object_frame)
 		frame_data = frame[0].data
 		frame_header = frame[0].header
 		
-		exptime = frame_header["EXPTIME"]
-		sigma = 3.0
+		exptime = frame_header['EXPTIME']
 		wcs = WCS(frame_header)
 
 		# --- Create frame mask
 		mask, boxes = reducer.make_mask(object_frame)
 
 		# --- Calculate background statistics
-		mean, median, std = sigma_clipped_stats(frame_data, mask=mask, sigma=sigma)
+		mean, median, std = sigma_clipped_stats(frame_data, mask=mask, sigma=Configuration.SIGMA_BKG)
+		print(mean, median, std)
 
 		# --- Grab sky coordinates from catalog
 		sky_coord_list = []
 		for item in match_table:
 
-			if survey == "gaia":
-				ra = item["ra"]
-				dec = item["dec"]
-
-			else:
-				ra = item["raMean"]
-				dec = item["decMean"]
+			ra = item['ra']
+			dec = item['dec']
 
 			coord_tuple = (ra, dec)
 			sky_coord_list.append(coord_tuple)
 
 		# --- Convert sky coordinates to pixel coordinates
-		sky_positions = SkyCoord(sky_coord_list, unit="deg")
+		sky_positions = SkyCoord(sky_coord_list, unit='deg')
 		pix_positions = skycoord_to_pixel(sky_positions, wcs=wcs)
 
 		pix_coord_list = []
@@ -161,12 +161,8 @@ class Photometer:
 			pix_coord_list.append(coord_tuple)
 
 		# --- Create apertures and annuli
-		ap = 11
-		an_in = 18
-		an_out = 26
-
-		apertures = CircularAperture(pix_coord_list, r=ap)
-		annuli = CircularAnnulus(pix_coord_list, r_in=an_in, r_out=an_out)
+		apertures = CircularAperture(pix_coord_list, r=Configuration.RAD_AP)
+		annuli = CircularAnnulus(pix_coord_list, r_in=Configuration.RAD_AN_IN, r_out=Configuration.RAD_AN_OUT)
 		apers = [apertures, annuli]
 
 		# --- Conduct aperture photometry at all catalog positions
@@ -175,14 +171,14 @@ class Photometer:
 		aperture_area = apertures.area
 		annulus_area = annuli.area
 
-		bkg_mean = phot_table["aperture_sum_1"] / annulus_area
-		phot_table["annulus_mean"] = bkg_mean
+		bkg_mean = phot_table['aperture_sum_1'] / annulus_area
+		phot_table['annulus_mean'] = bkg_mean
 
 		bkg_sum = bkg_mean * aperture_area
-		phot_table["aperture_bkg_sum"] = bkg_sum
+		phot_table['aperture_bkg_sum'] = bkg_sum
 
-		final_sum = phot_table["aperture_sum_0"] - bkg_sum
-		phot_table["res_aperture_sum"] = final_sum
+		final_sum = phot_table['aperture_sum_0'] - bkg_sum
+		phot_table['res_aperture_sum'] = final_sum
 
 		# --- Merge catalog and photometry tables into master table
 		master_table = hstack([match_table, phot_table])
@@ -195,18 +191,20 @@ class Photometer:
 		inst_mag_list = []
 		inst_mag_error_list = []
 
+		bkg_val = median + std
+
 		for item in master_table:
 
 			# --- Filter flux values below mean (and zero)
-			if item["res_aperture_sum"] <= mean:
+			if item['res_aperture_sum'] <= bkg_val:
 				flux_flag_list.append(True)
-				if mean <= 0.0:
-					flux = std
-				else:
-					flux = mean
+				flux = bkg_val
+
 			else:
 				flux_flag_list.append(False)
-				flux = item["res_aperture_sum"]
+				flux = item['res_aperture_sum']
+
+			print(flux)
 
 			flux_list.append(flux)
 
@@ -222,11 +220,11 @@ class Photometer:
 			inst_mag_error = (2.5 * flux_error) / (math.log(10) * flux)
 			inst_mag_error_list.append(inst_mag_error)
 
-		master_table["flux"] = flux_list
-		master_table["flux_error"] = flux_error_list
-		master_table["flux_flag"] = flux_flag_list
-		master_table["inst_mag"] = inst_mag_list
-		master_table["inst_mag_error"] = inst_mag_error_list
+		master_table['flux'] = flux_list
+		master_table['flux_error'] = flux_error_list
+		master_table['flux_flag'] = flux_flag_list
+		master_table['inst_mag'] = inst_mag_list
+		master_table['inst_mag_error'] = inst_mag_error_list
 
 		# --- Calculate colors and delta magnitudes
 		color_list = []
@@ -238,30 +236,36 @@ class Photometer:
 			if survey == "gaia":
 
 				if item["phot_bp_n_obs"] == 0 or item["phot_rp_n_obs"] == 0:
+					
 					color_flag_list.append(True)
 					color = 0
 					cat_mag = 0
 
 				else:
+					
 					color_flag_list.append(False)
 					b = item["phot_bp_mean_mag"]
-					b = b.unmasked.value
+					#b = b.unmasked.value
 					r = item["phot_rp_mean_mag"]
-					r = r.unmasked.value
+					#r = r.unmasked.value
+
 					color = b - r
-					# cat_mag = ???
+					cat_mag = item['phot_g_mean_mag']
 
 			else:
 
 				if item["nr"] == 0 or item["ni"] == 0:
+
 					color_flag_list.append(True)
 					color = 0
 					cat_mag = 0
 
 				else:
+
 					color_flag_list.append(False)
 					r = item["rMeanPSFMag"]
 					i = item["iMeanPSFMag"]
+
 					color = r - i
 					cat_mag = item["rMeanPSFMag"]
 
@@ -280,8 +284,10 @@ class Photometer:
 		delta_mag_list = []
 
 		for item in master_table:
-			if item["flux_flag"] == True or item["color_flag"] == True:
+
+			if (item["flux_flag"] == True) or (item["color_flag"] == True):
 				pass
+
 			else:
 				color = item["color"]
 				color_list.append(color)
