@@ -1,7 +1,5 @@
 # Hades
 
-[![Documentation Status](https://readthedocs.org/projects/plouton/badge/?version=latest)](https://plouton.readthedocs.io/en/latest/?badge=latest)
-
 **HADES** is an astronomical image reduction and photometry toolbox.
 
 ---
@@ -65,11 +63,9 @@ $ python script_quick_reduce.py
 ---
 
 7 Jun 2019<br>
-Last update: 17 Aug 2023
+Last update: 5 Jul 2024
 
 Richard Camuccio<br>
 rcamuccio@gmail.com
 
 (Imageredux > CAL > Hades)
-
-Test
