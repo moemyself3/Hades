@@ -1,0 +1,26 @@
+2024-07-05 15:45:40,195 - INFO: Message from channel igwn.gwalert received!
+2024-07-05 15:45:40,195 - INFO: Reading alert parameters for igwn.gwalert message...
+2024-07-05 15:45:40,197 - INFO: Event MS240705u generated at time 2024-07-05T20:45:38Z.
+2024-07-05 15:45:40,197 - INFO: GraceDB URL: https://gracedb.ligo.org/superevents/MS240705u/view/.
+2024-07-05 15:45:40,197 - INFO: Note: this is a MOCK event!
+2024-07-05 15:45:40,201 - INFO: Saving JSON for MS240705u.
+2024-07-05 15:45:40,201 - INFO: This is a preliminary alert for MS240705u!
+2024-07-05 15:50:18,052 - INFO: Message from channel igwn.gwalert received!
+2024-07-05 15:50:18,052 - INFO: Reading alert parameters for igwn.gwalert message...
+2024-07-05 15:50:18,062 - INFO: Event MS240705u generated at time 2024-07-05T20:50:13Z.
+2024-07-05 15:50:18,062 - INFO: GraceDB URL: https://gracedb.ligo.org/superevents/MS240705u/view/.
+2024-07-05 15:50:18,062 - INFO: Note: this is a MOCK event!
+2024-07-05 15:50:18,062 - INFO: JSON already saved for MS240705u.
+2024-07-05 15:50:18,063 - INFO: This is a preliminary alert for MS240705u!
+2024-07-05 15:55:33,502 - INFO: Message from channel igwn.gwalert received!
+2024-07-05 15:55:33,502 - INFO: Reading alert parameters for igwn.gwalert message...
+2024-07-05 15:55:33,504 - INFO: Event MS240705u generated at time 2024-07-05T20:55:31Z.
+2024-07-05 15:55:33,504 - INFO: GraceDB URL: https://gracedb.ligo.org/superevents/MS240705u/view/.
+2024-07-05 15:55:33,504 - INFO: Note: this is a MOCK event!
+2024-07-05 15:55:33,504 - INFO: JSON already saved for MS240705u.
+2024-07-05 15:55:33,504 - INFO: This is a INITIAL alert for MS240705u!
+2024-07-05 15:55:33,504 - INFO: Reading event parameters and skymap.
+2024-07-05 15:55:33,504 - INFO: This is a merger event!
+2024-07-05 15:55:33,517 - INFO: Saving skymap for event MS240705u.
+2024-07-05 15:55:33,532 - INFO: Saving 90 percent credible region for event MS240705u.
+2024-07-05 15:55:33,536 - INFO: Generating field list from skymap for MS240705u.

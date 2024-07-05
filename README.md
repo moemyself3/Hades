@@ -1,25 +1,33 @@
 # Hades
 
-**HADES** is an astronomical image reduction and photometry toolbox.
+**HADES** is an astronomical observer's toolbox. It contains a set of tools designed to accomplish a variety of observational tasks, including image processing, aperture photometry, and responding to astronomical alerts.
 
 ---
 
 ## Usage
 
-### Structure
+The code is run through a set of scripts from the main HADES directory. The scripts currently available include:
 
-There are currently six classes in the toolbox:
+- GCN listener (`gcn_listener.py`)
+- Limiting magnitude (`limiting_magnitude.py`)
+- Quick reduction (`quick_reduction.py`)
+- Relative photometry (`relative_photometry.py`)
 
-- Calculator
-- Photometer
-- Plotter
-- Querier
-- Reader
-- Reducer
+### Configuration
 
-All parameters are read from the `config.ini` file.
+The settings are controlled in the `config.py` file.
 
-### File Format
+### Example 1: Running the GCN listener
+
+```
+$ python -m scripts.listener
+```
+
+### Example 2: Running quick reduction on observational data
+
+```
+$ python -m scripts.quick_reduction
+```
 
 The toolbox is run on a single night (yyyy-mm-dd) of data, assuming the following directory format:
 
@@ -44,21 +52,11 @@ The toolbox is run on a single night (yyyy-mm-dd) of data, assuming the followin
 		...
 ```
 
-### Example 1: Single-Field Reduction
-
-```
-$ python script_driver.py
-```
-
-### Example 2: Quick Reduction
-
-```
-$ python script_quick_reduce.py
-```
-
 ---
 
 ## Installation
+
+HADES was developed on a machine (`Epimetheus`) running Ubuntu 22.04.4 LTS and using an Anaconda environment with Python 3.12.3. The list of library requirements are listed in the the `requirements.txt` file in the main directory.
 
 ---
 

@@ -1,8 +1,3 @@
-'''
-Reducer class
-
-'''
-
 from config import Configuration
 
 from astropy import units as u
