@@ -70,6 +70,8 @@ class Configuration:
 	CAMERA = 'PL16803'				# The name of the camera that took the image data
 	PIXEL_SIZE = 0.6305				# The plate scale of the optical system [arcsec/px]
 	DEC_LIMIT = -40.00				# The declination limit of the telescope [deg]
+	FIELD_GENERATION = 'N'
+	FIELD_SIZE = 0.6
 
 	AIRMASS_METHOD = 'ky1998'
 	BKG_METHOD = 'flat'
