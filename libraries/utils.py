@@ -1,8 +1,3 @@
-'''
-Utils class
-
-'''
-
 from config import Configuration
 
 import glob

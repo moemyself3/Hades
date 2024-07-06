@@ -11,6 +11,44 @@ class Configuration:
 	CLIENT_ID = 'client_id'
 	CLIENT_SECRET = 'client_secret'
 
+	WORKING_DIR = '/home/epimetheus/Downloads/2024-06-16/grb240615a/align/'
+	OBJECT = 'grb240615a'
+	FIELD_RA = 326.1413
+	FIELD_DEC = 38.5948
+
+	LATITUDE = 25.995789
+	LONGITUDE = -97.568956
+	ELEVATION = 11.5
+
+	CAMERA = 'PL16803'
+	PIXEL_SIZE = 0.6305
+	NUM_PIXELS = 4096
+	DEC_LIMIT = -40.00
+	FIELD_GENERATION = 'N'
+	FIELD_SIZE = 0.6
+
+	AIRMASS_METHOD = 'ky1998'
+	BKG_METHOD = 'flat'
+	BOX_SIZE = (50, 50)
+	CATALOG = 'gaia-cone'
+	CATALOG_F1 = 'r'
+	CATALOG_F2 = 'i'
+	COMBINE_METHOD = 'median'
+	DILATE_SIZE = 25
+	DTYPE = 'float32'
+	FILTER_SIZE = (3, 3)
+	MEM_LIMIT = 32e9
+	NPIXELS = 3
+	PHOT_F1 = 'r'
+	PHOT_F2 = 'i'
+	RAD_AN_IN = 17
+	RAD_AN_OUT = 20
+	RAD_AP = 14
+	RAD_SOLVE = 1
+	RAD_QUERY = 1
+	SIGMA_BKG = 3.0
+	SIGMA_SRC = 5.0
+
 	AVAILABLE_TOPICS = ['igwn.gwalert',
 						'gcn.notices.icecube.lvk_nu_track_search',
 						'gcn.notices.swift.bat.guano',
@@ -58,39 +96,25 @@ class Configuration:
 						'gcn.classic.text.SWIFT_XRT_THRESHPIX',
 						'gcn.classic.text.SWIFT_XRT_THRESHPIX_PROC']
 
-	WORKING_DIR = '/home/epimetheus/Downloads/2024-06-16/grb240615a/align/'
-	OBJECT = 'grb240615a'
-	FIELD_RA = 326.1413
-	FIELD_DEC = 38.5948
-
-	LATITUDE = 25.995789			# The latitude of the observatory
-	LONGITUDE = -97.568956			# The longitude of the observatory
-	ELEVATION = 11.5				# The elevation of the observatory above sea level [m]
-
-	CAMERA = 'PL16803'				# The name of the camera that took the image data
-	PIXEL_SIZE = 0.6305				# The plate scale of the optical system [arcsec/px]
-	DEC_LIMIT = -40.00				# The declination limit of the telescope [deg]
-	FIELD_GENERATION = 'N'
-	FIELD_SIZE = 0.6
-
-	AIRMASS_METHOD = 'ky1998'
-	BKG_METHOD = 'flat'
-	BOX_SIZE = (50, 50)
-	CATALOG = 'gaia-cone'			# The query catalog [gaia-cone, gaia-square]
-	CATALOG_F1 = 'r'
-	CATALOG_F2 = 'i'
-	COMBINE_METHOD = 'median'
-	DILATE_SIZE = 25
-	DTYPE = 'float32'
-	FILTER_SIZE = (3, 3)
-	MEM_LIMIT = 32e9
-	NPIXELS = 3
-	PHOT_F1 = 'r'
-	PHOT_F2 = 'i'
-	RAD_AN_IN = 17					# The annulus inner radius for photometry [px]
-	RAD_AN_OUT = 20					# The annulus outer radius for photometry [px]
-	RAD_AP = 14						# The aperture radius for photometry [px]
-	RAD_SOLVE = 1					# The constraining radius for plate solving [deg]
-	RAD_QUERY = 1					# The search radius for querying catalogs [deg]
-	SIGMA_BKG = 3.0
-	SIGMA_SRC = 5.0
+	UNAVAILABLE_TOPICS = ['gcn.classic.text.FERMI_GBM_LC',
+						'gcn.classic.text.FERMI_GBM_TRANS',
+						'gcn.classic.text.FERMI_LAT_GND',
+						'gcn.classic.text.FERMI_LAT_POS_DIAG',
+						'gcn.classic.text.FERMI_LAT_POS_INI',
+						'gcn.classic.text.FERMI_LAT_POS_UPD',
+						'gcn.classic.text.FERMI_LAT_TRANS',	
+						'gcn.classic.text.FERMI_SC_SLEW',
+						'gcn.classic.text.SWIFT_BAT_ALARM_LONG',
+						'gcn.classic.text.SWIFT_BAT_ALARM_SHORT',
+						'gcn.classic.text.SWIFT_BAT_GRB_ALERT',
+						'gcn.classic.text.SWIFT_BAT_GRB_LC_PROC',
+						'gcn.classic.text.SWIFT_BAT_GRB_POS_NACK',
+						'gcn.classic.text.SWIFT_BAT_KNOWN_SRC',
+						'gcn.classic.text.SWIFT_BAT_MONITOR',
+						'gcn.classic.text.SWIFT_BAT_SLEW_POS',
+						'gcn.classic.text.SWIFT_BAT_SUB_THRESHOLD',
+						'gcn.classic.text.SWIFT_BAT_SUBSUB',
+						'gcn.classic.text.SWIFT_FOM_PPT_ARG_ERR',
+						'gcn.classic.text.SWIFT_FOM_SAFE_POINT',
+						'gcn.classic.text.SWIFT_FOM_SLEW_ABORT',
+						'gcn.classic.text.SWIFT_XRT_EMERGENCY']

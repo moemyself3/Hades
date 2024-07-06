@@ -114,7 +114,7 @@ class Router:
 			e_range = params['E_RANGE']
 			loc_algorithm = params['LOC_ALGORITHM']
 			lc_url = params['LC_URL']
-			loc_url = parmas['LOC_URL']
+			loc_url = params['LOC_URL']
 			sun_postn = params['SUN_POSTN']
 			sun_dist = params['SUN_DIST']
 			moon_postn = params['MOON_POSTN']
@@ -766,9 +766,17 @@ class Router:
 					hdr_object = skymap.meta['OBJECT']			# unique identifier for this event
 					hdr_date = skymap.meta['DATE-OBS']			# UTC of observation
 					hdr_mjd = skymap.meta['MJD-OBS']			# MJD of observation
-					hdr_distmean = skymap.meta['DISTMEAN']		# posterior mean distance [Mpc]
-					hdr_diststd = skymap.meta['DISTSTD']		# posterior std distance [Mpc]
 
+					try:
+						hdr_distmean = skymap.meta['DISTMEAN']		# posterior mean distance [Mpc]
+					except KeyError:
+						print('Could not read DISTMEAN')
+
+					try:
+						hdr_diststd = skymap.meta['DISTSTD']		# posterior std distance [Mpc]
+					except KeyError:
+						print('Could not read DISTSTD')
+						
 					# most probable sky location
 					i = np.argmax(skymap['PROBDENSITY'])
 					uniq = skymap[i]['UNIQ']
@@ -873,9 +881,7 @@ class Router:
 			pval_generic = record['pval_generic']
 			pval_bayesian = record['pval_bayesian']
 			n_events_coincident = record['n_events_coincident']
-
 			coincident_events = record['coincident_events']
-
 			most_probable_direction = record['most_probable_direction']
 			flux_sensitivity = record['neutrino_flux_sensitivity_range']['flux_sensitivity']
 			sensitive_energy_range = record['neutrino_flux_sensitivity_range']['sensitive_energy_range']
@@ -898,11 +904,75 @@ class Router:
 			print()
 
 		elif topic == 'gcn.notices.swift.bat.guano':
+
+			Utils.log('Reading alert parameters for ' + topic + ' message.', 'info')
+
 			record = json.loads(value)
-			print(topic, 'alert received!')
-			print(value)
-			print(record)
-			print()
+
+			mission = record['mission']
+			instrument = record['instrument']
+			messenger = record['messenger']
+			record_number = record['record_number']
+			alert_datetime = record['alert_datetime']
+			alert_tense = record['alert_tense']
+			alert_type = record['alert_type']
+			trigger_time = record['trigger_time']
+			follow_up_event = record['follow_up_event']
+			follow_up_type = record['follow_up_type']
+			data_archive_page = record['data_archive_page']
+			alert_id = record['id']
+
+			Utils.log('Event BAT-GUANO/' + follow_up_event + ' generated at time ' + str(alert_datetime) + '.', 'info')
+			Utils.log('Data Archive Page: ' + str(data_archive_page) + '.', 'info')
+
+			# 1 - guano.example.json
+			if record_number == 1:
+				Utils.log('This is a BAT-GUANO (standard) alert for event ' + follow_up_event + '.', 'info')
+
+				rate_snr = record['rate_snr']
+				rate_duration = record['rate_duration']
+				rate_energy_range = record['rate_energy_range']
+				classification = record['classification']
+				far = record['far']
+			
+			# 2 - guano.loc_map.example.json
+			if record_number == 2:
+				Utils.log('This is a BAT-GUANO (loc_map) alert for event ' + follow_up_event + '.', 'info')
+
+				healpix_file = record['healpix_file']
+				systematic_included = record['systematic_included']
+				rate_snr = record['rate_snr']
+				rate_duration = record['rate_duration']
+				rate_energy_range = record['rate_energy_range']
+				classification = record['classification']
+				far = record['far']
+
+			# 3 - guano.loc_arc_min.example.json
+			elif record_number == 3:
+				Utils.log('This is a BAT-GUANO (loc_arc_min) alert for event ' + follow_up_event + '.', 'info')
+
+				ra = record['ra']
+				dec = record['dec']
+				ra_dec_error = record['ra_dec_error']
+				containment_probability = record['containment_probability']
+				systematic_included = record['systematic_included']
+				image_snr = record['image_snr']
+				image_duration = record['image_duration']
+				image_energy_range = record['image_energy_range']
+				rate_snr = record['rate_snr']
+				rate_duration = record['rate_duration']
+				rate_energy_range = record['rate_energy_range']
+				classification = record['classification']
+				far = record['far']
+
+			# 4 - guano.retraction
+			elif record_number == 4:
+				Utils.log('BAT-GUANO alert for event ' + follow_up_event + ' was retracted!', 'info')
+
+			else:
+				print('Could not read BAT-GUANO notice.')
+				print(topic)
+				print(value)
 
 	@staticmethod
 	def route_alert(value, topic):

@@ -1,8 +1,3 @@
-"""
-Photometer class
-
-"""
-
 from config import Configuration
 
 from astropy.coordinates import EarthLocation, SkyCoord

@@ -24,3 +24,109 @@
 2024-07-05 15:55:33,517 - INFO: Saving skymap for event MS240705u.
 2024-07-05 15:55:33,532 - INFO: Saving 90 percent credible region for event MS240705u.
 2024-07-05 15:55:33,536 - INFO: Generating field list from skymap for MS240705u.
+2024-07-05 16:07:43,939 - INFO: Message from channel gcn.classic.text.SWIFT_POINTDIR received!
+2024-07-05 16:09:41,119 - INFO: Message from channel gcn.classic.text.SWIFT_ACTUAL_POINTDIR received!
+2024-07-05 16:21:12,408 - INFO: Message from channel gcn.classic.text.FERMI_POINTDIR received!
+2024-07-05 16:22:43,612 - INFO: Message from channel gcn.classic.text.SWIFT_POINTDIR received!
+2024-07-05 16:25:29,014 - INFO: Message from channel gcn.classic.text.SWIFT_ACTUAL_POINTDIR received!
+2024-07-05 16:35:28,878 - INFO: Message from channel gcn.classic.text.SWIFT_POINTDIR received!
+2024-07-05 16:38:51,135 - INFO: Message from channel gcn.classic.text.SWIFT_ACTUAL_POINTDIR received!
+2024-07-05 16:45:43,190 - INFO: Message from channel igwn.gwalert received!
+2024-07-05 16:45:43,190 - INFO: Reading alert parameters for igwn.gwalert message...
+2024-07-05 16:45:43,192 - INFO: Event MS240705v generated at time 2024-07-05T21:45:38Z.
+2024-07-05 16:45:43,192 - INFO: GraceDB URL: https://gracedb.ligo.org/superevents/MS240705v/view/.
+2024-07-05 16:45:43,192 - INFO: Note: this is a MOCK event!
+2024-07-05 16:45:43,196 - INFO: Saving JSON for MS240705v.
+2024-07-05 16:45:43,196 - INFO: This is a PRELIMINARY alert for MS240705v!
+2024-07-05 16:45:43,196 - INFO: Reading event parameters and skymap.
+2024-07-05 16:45:43,196 - INFO: This is a merger event!
+2024-07-05 16:45:43,208 - INFO: Saving skymap for event MS240705v.
+2024-07-05 16:45:43,224 - INFO: Saving 90 percent credible region for event MS240705v.
+2024-07-05 16:45:43,229 - INFO: Generating field list from skymap for MS240705v.
+2024-07-05 16:45:43,229 - INFO: Now generating survey fields.
+2024-07-05 16:55:34,400 - INFO: Message from channel igwn.gwalert received!
+2024-07-05 16:55:34,400 - INFO: Reading alert parameters for igwn.gwalert message...
+2024-07-05 16:55:34,402 - INFO: Event MS240705v generated at time 2024-07-05T21:55:32Z.
+2024-07-05 16:55:34,402 - INFO: GraceDB URL: https://gracedb.ligo.org/superevents/MS240705v/view/.
+2024-07-05 16:55:34,402 - INFO: Note: this is a MOCK event!
+2024-07-05 16:55:34,402 - INFO: JSON already saved for MS240705v.
+2024-07-05 16:55:34,402 - INFO: This is a INITIAL alert for MS240705v!
+2024-07-05 16:55:34,402 - INFO: Reading event parameters and skymap.
+2024-07-05 16:55:34,402 - INFO: This is a merger event!
+2024-07-05 16:55:34,413 - INFO: Skymap already saved for MS240705v.
+2024-07-05 16:55:34,413 - INFO: MOC 90 percent credible region already saved for MS240705v.
+2024-07-05 16:55:34,413 - INFO: Generating field list from skymap for MS240705v.
+2024-07-05 16:55:34,413 - INFO: Now generating survey fields.
+2024-07-05 16:57:21,015 - INFO: Generating galaxy list from skymap for MS240705v.
+2024-07-05 16:57:21,035 - INFO: Reading GLADE catalog.
+2024-07-05 17:15:14,152 - INFO: Message from channel gcn.classic.text.SWIFT_POINTDIR received!
+2024-07-05 17:17:54,807 - INFO: Message from channel gcn.classic.text.SWIFT_ACTUAL_POINTDIR received!
+2024-07-05 17:21:13,086 - INFO: Message from channel gcn.classic.text.FERMI_POINTDIR received!
+2024-07-05 17:24:14,636 - INFO: Message from channel gcn.classic.text.FERMI_GBM_ALERT received!
+2024-07-05 17:24:17,962 - INFO: Message from channel gcn.classic.text.FERMI_GBM_FLT_POS received!
+2024-07-05 17:24:24,789 - INFO: Message from channel gcn.classic.text.FERMI_GBM_FLT_POS received!
+2024-07-05 17:25:21,541 - INFO: Message from channel gcn.classic.text.FERMI_GBM_FLT_POS received!
+2024-07-05 17:25:28,545 - INFO: Message from channel gcn.classic.text.FERMI_GBM_GND_POS received!
+2024-07-05 17:25:38,520 - INFO: Message from channel gcn.classic.text.FERMI_GBM_GND_POS received!
+2024-07-05 17:27:14,269 - INFO: Message from channel gcn.classic.text.SWIFT_POINTDIR received!
+2024-07-05 17:28:43,977 - INFO: Message from channel gcn.classic.text.FERMI_GBM_POS_TEST received!
+2024-07-05 17:29:19,812 - INFO: Message from channel gcn.classic.text.SWIFT_ACTUAL_POINTDIR received!
+2024-07-05 17:33:36,838 - INFO: Message from channel gcn.classic.text.FERMI_GBM_FIN_POS received!
+2024-07-05 18:36:32,986 - INFO: Message from channel gcn.classic.text.FERMI_LAT_POS_TEST received!
+2024-07-05 18:37:44,365 - INFO: Message from channel gcn.classic.text.SWIFT_POINTDIR received!
+2024-07-05 18:39:24,007 - INFO: Message from channel gcn.classic.text.SWIFT_ACTUAL_POINTDIR received!
+2024-07-05 18:45:41,239 - INFO: Message from channel igwn.gwalert received!
+2024-07-05 18:45:41,239 - INFO: Reading alert parameters for igwn.gwalert message...
+2024-07-05 18:45:41,241 - INFO: Event MS240705x generated at time 2024-07-05T23:45:38Z.
+2024-07-05 18:45:41,241 - INFO: GraceDB URL: https://gracedb.ligo.org/superevents/MS240705x/view/.
+2024-07-05 18:45:41,241 - INFO: Note: this is a MOCK event!
+2024-07-05 18:45:41,244 - INFO: Saving JSON for MS240705x.
+2024-07-05 18:45:41,245 - INFO: This is a PRELIMINARY alert for MS240705x!
+2024-07-05 18:45:41,245 - INFO: Reading event parameters and skymap.
+2024-07-05 18:45:41,245 - INFO: This is a merger event!
+2024-07-05 18:45:41,256 - INFO: Saving skymap for event MS240705x.
+2024-07-05 18:45:41,273 - INFO: Saving 90 percent credible region for event MS240705x.
+2024-07-05 18:45:41,278 - INFO: Generating field list from skymap for MS240705x.
+2024-07-05 18:45:44,341 - INFO: Generating galaxy list from skymap for MS240705x.
+2024-07-05 18:45:44,359 - INFO: Reading GLADE catalog.
+2024-07-05 18:46:24,112 - INFO: Slicing GLADE catalog.
+2024-07-05 18:50:20,757 - INFO: Message from channel igwn.gwalert received!
+2024-07-05 18:50:20,757 - INFO: Reading alert parameters for igwn.gwalert message...
+2024-07-05 18:50:20,761 - INFO: Event MS240705x generated at time 2024-07-05T23:50:16Z.
+2024-07-05 18:50:20,761 - INFO: GraceDB URL: https://gracedb.ligo.org/superevents/MS240705x/view/.
+2024-07-05 18:50:20,761 - INFO: Note: this is a MOCK event!
+2024-07-05 18:50:20,761 - INFO: JSON already saved for MS240705x.
+2024-07-05 18:50:20,761 - INFO: This is a PRELIMINARY alert for MS240705x!
+2024-07-05 18:50:20,761 - INFO: Reading event parameters and skymap.
+2024-07-05 18:50:20,761 - INFO: This is a merger event!
+2024-07-05 18:50:20,771 - INFO: Skymap already saved for MS240705x.
+2024-07-05 18:50:20,771 - INFO: MOC 90 percent credible region already saved for MS240705x.
+2024-07-05 18:50:20,771 - INFO: Field list already generated from skymap for MS240705x.
+2024-07-05 18:50:20,771 - INFO: Galaxy list already generated from skymap for MS240705x.
+2024-07-05 18:51:06,382 - INFO: Message from channel gcn.classic.text.SWIFT_BAT_GRB_POS_TEST received!
+2024-07-05 18:55:31,006 - INFO: Message from channel igwn.gwalert received!
+2024-07-05 18:55:31,006 - INFO: Reading alert parameters for igwn.gwalert message...
+2024-07-05 18:55:31,007 - INFO: Event MS240705x generated at time 2024-07-05T23:55:30Z.
+2024-07-05 18:55:31,007 - INFO: GraceDB URL: https://gracedb.ligo.org/superevents/MS240705x/view/.
+2024-07-05 18:55:31,007 - INFO: Note: this is a MOCK event!
+2024-07-05 18:55:31,007 - INFO: JSON already saved for MS240705x.
+2024-07-05 18:55:31,007 - INFO: Alert for MS240705x was retracted!
+2024-07-05 18:55:31,008 - INFO: Deleting fields for retracted alert MS240705x.
+2024-07-05 18:55:31,015 - INFO: Deleting galaxies for retracted alert MS240705x.
+2024-07-05 18:55:31,021 - INFO: Deleting JSON for retracted alert MS240705x.
+2024-07-05 18:55:31,023 - INFO: Deleting skymap for MS240705x.
+2024-07-05 18:55:31,025 - INFO: Deleting 90 percent credible region for MS240705x.
+2024-07-05 19:00:13,904 - INFO: Message from channel gcn.classic.text.SWIFT_POINTDIR received!
+2024-07-05 19:02:35,565 - INFO: Message from channel gcn.classic.text.SWIFT_ACTUAL_POINTDIR received!
+2024-07-05 19:14:29,116 - INFO: Message from channel gcn.classic.text.SWIFT_POINTDIR received!
+2024-07-05 19:18:24,802 - INFO: Message from channel gcn.classic.text.SWIFT_ACTUAL_POINTDIR received!
+2024-07-05 19:21:13,145 - INFO: Message from channel gcn.classic.text.FERMI_POINTDIR received!
+2024-07-05 19:22:17,601 - INFO: Message from channel igwn.gwalert received!
+2024-07-05 19:22:17,601 - INFO: Reading alert parameters for igwn.gwalert message...
+2024-07-05 19:22:17,604 - INFO: Event S240706g generated at time 2024-07-06T00:22:16Z.
+2024-07-05 19:22:17,604 - INFO: GraceDB URL: https://gracedb.ligo.org/superevents/S240706g/view/.
+2024-07-05 19:22:17,604 - INFO: Note: this is a REAL event!
+2024-07-05 19:22:17,611 - INFO: Saving JSON for S240706g.
+2024-07-05 19:22:17,612 - INFO: This is a PRELIMINARY alert for S240706g!
+2024-07-05 19:22:17,612 - INFO: Reading event parameters and skymap.
+2024-07-05 19:22:17,612 - INFO: This is a merger event!
