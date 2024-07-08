@@ -1,29 +1,21 @@
 class Configuration:
 
-	MACHINE = 'epimetheus'
-
+	WORKING_DIR = '/home/epimetheus/Downloads/2024-06-16/grb240615a/align/'
+	
 	MAIN_DIRECTORY = '/home/epimetheus/Downloads/hades/'
 	ALERTS_DIRECTORY = MAIN_DIRECTORY + 'alerts/'
 	ANALYSIS_DIRECTORY = MAIN_DIRECTORY + 'analysis/'
 	LOG_DIRECTORY = MAIN_DIRECTORY + 'logs/'
 	QUERIES_DIRECTORY = MAIN_DIRECTORY + 'queries/'
-
-	CLIENT_ID = 'client_id'
-	CLIENT_SECRET = 'client_secret'
-
-	WORKING_DIR = '/home/epimetheus/Downloads/2024-06-16/grb240615a/align/'
+	
 	OBJECT = 'grb240615a'
 	FIELD_RA = 326.1413
 	FIELD_DEC = 38.5948
+	
+	CAMERA = 'PL16803'	# PL16803, ST8300, TOROS
+	MACHINE = 'epimetheus'
+	OBSERVATORY = 'CTMO'	# CTMO, Macon, OAFA
 
-	LATITUDE = 25.995789
-	LONGITUDE = -97.568956
-	ELEVATION = 11.5
-
-	CAMERA = 'PL16803'
-	PIXEL_SIZE = 0.6305
-	NUM_PIXELS = 4096
-	DEC_LIMIT = -40.00
 	FIELD_GENERATION = 'N'
 	FIELD_SIZE = 0.6
 
@@ -48,6 +40,9 @@ class Configuration:
 	RAD_QUERY = 1
 	SIGMA_BKG = 3.0
 	SIGMA_SRC = 5.0
+
+	CLIENT_ID = 'client_id'
+	CLIENT_SECRET = 'client_secret'
 
 	AVAILABLE_TOPICS = ['igwn.gwalert',
 						'gcn.notices.icecube.lvk_nu_track_search',
