@@ -1,11 +1,5 @@
-"""
-Calculator class
-
-"""
-
 from astropy.coordinates import AltAz, SkyCoord
 from scipy.optimize import curve_fit
-
 import math
 import numpy as np
 

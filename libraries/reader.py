@@ -1,8 +1,3 @@
-"""
-Reader class
-
-"""
-
 from astropy.io import fits
 from astropy.stats import sigma_clipped_stats
 from astropy.time import Time

@@ -5,7 +5,6 @@ from astropy.coordinates import SkyCoord
 from astropy.io import ascii
 from astropy.table import Table
 from astroquery.gaia import Gaia
-
 import numpy as np
 import requests
 

@@ -1,4 +1,7 @@
 from config import Configuration
+from libraries.calculator import Calculator
+from libraries.plotter import Plotter
+from libraries.reducer import Reducer
 
 from astropy.coordinates import EarthLocation, SkyCoord
 from astropy.io import fits
@@ -8,16 +11,8 @@ from astropy.time import Time
 from astropy.wcs import WCS
 from astropy.wcs.utils import skycoord_to_pixel
 from photutils.aperture import aperture_photometry, CircularAnnulus, CircularAperture
-
 import math
 
-from libraries.calculator import *
-from libraries.plotter import *
-from libraries.reducer import *
-
-calculator = Calculator()
-plotter = Plotter()
-reducer = Reducer()
 
 class Photometer:
 
@@ -29,15 +24,13 @@ class Photometer:
 		frame_data = frame[0].data
 		frame_header = frame[0].header
 
-		sigma = 3.0
+		mask, boxes = Reducer.make_mask(object_frame)
 
-		mask, boxes = reducer.make_mask(object_frame)
-
-		print("Extracting sources (xp, yp) for", object_frame)
-		mean, median, std = sigma_clipped_stats(frame_data, mask=mask, sigma=sigma)
+		print('Extracting sources (xp, yp) for', object_frame)
+		mean, median, std = sigma_clipped_stats(frame_data, mask=mask, sigma=Configuration.SIGMA_BKG)
 
 		fwhm = 6.0
-		threshold = 5.*std
+		threshold = Configuration.SIGMA_SRC * std
 
 		daofind = DAOStarFinder(fwhm=fwhm, threshold=threshold)
 		table = daofind(frame_data, mask=mask)
@@ -54,9 +47,9 @@ class Photometer:
 
 		wcs = WCS(frame_header)
 
-		mask, boxes = reducer.make_mask(object_frame)
+		mask, boxes = Reducer.make_mask(object_frame)
 
-		print("Extracting sources (\u03B1, \u03B4) for", object_frame)
+		print('Extracting sources (\u03B1, \u03B4) for', object_frame)
 		mean, median, std = sigma_clipped_stats(frame_data, mask=mask, sigma=Configuration.SIGMA_BKG)
 
 		fwhm = 6.0
@@ -70,8 +63,8 @@ class Photometer:
 		dec_list = []
 
 		for item in table:
-			xp = item["xcentroid"]
-			yp = item["ycentroid"]
+			xp = item['xcentroid']
+			yp = item['ycentroid']
 
 			sky_positions = pixel_to_skycoord(xp, yp, wcs=wcs)
 
@@ -81,8 +74,8 @@ class Photometer:
 			ra_list.append(ra)
 			dec_list.append(dec)
 
-		table["ra"] = ra_list
-		table["dec"] = dec_list
+		table['ra'] = ra_list
+		table['dec'] = dec_list
 
 		return table
 
@@ -128,7 +121,7 @@ class Photometer:
 		wcs = WCS(frame_header)
 
 		# --- Create frame mask
-		mask, boxes = reducer.make_mask(object_frame)
+		mask, boxes = Reducer.make_mask(object_frame)
 
 		# --- Calculate background statistics
 		mean, median, std = sigma_clipped_stats(frame_data, mask=mask, sigma=Configuration.SIGMA_BKG)
@@ -290,12 +283,12 @@ class Photometer:
 				delta_mag = item["delta_mag"]
 				delta_mag_list.append(delta_mag)
 
-		yfit, slope, intercept, delta_slope, delta_intercept = calculator.unweighted_fit(color_list, delta_mag_list)
+		yfit, slope, intercept, delta_slope, delta_intercept = Calculator.unweighted_fit(color_list, delta_mag_list)
 
 		print("Transform:", slope, "+/-", delta_slope)
 		print("ZP:", intercept, "+/-", delta_intercept)
 
-		plotter.plot_colormag(object_name, color_list, delta_mag_list, yfit)
+		Plotter.plot_colormag(object_name, color_list, delta_mag_list, yfit)
 
 		return master_table
 
@@ -324,7 +317,7 @@ class Photometer:
 		location = EarthLocation(lat=latitude, lon=longitude, height=height)
 
 		altitude = 59.1
-		airmass = calculator.calculate_airmass(altitude)
+		airmass = Calculator.calculate_airmass(altitude)
 
 		pix_coord_tuple = (xp, yp)
 
@@ -389,7 +382,7 @@ class Photometer:
 
 		sigma = 3.0
 
-		mask, boxes = reducer.make_mask(object_frame)
+		mask, boxes = Reducer.make_mask(object_frame)
 		mean, median, std = sigma_clipped_stats(frame_data, mask=mask, sigma=sigma)
 		
 		exptime = frame_header["EXPTIME"]
@@ -401,8 +394,8 @@ class Photometer:
 		longitude = -97.568954
 		height = 11.5
 		location = EarthLocation(lat=latitude, lon=longitude, height=height)
-		altitude = calculator.calculate_altitude(location, obstime, ra, dec)
-		airmass = calculator.calculate_airmass(altitude)
+		altitude = Calculator.calculate_altitude(location, obstime, ra, dec)
+		airmass = Calculator.calculate_airmass(altitude)
 
 		sky_position = SkyCoord(ra, dec, unit="deg")
 		pix_position = skycoord_to_pixel(sky_position, wcs=wcs)
@@ -480,9 +473,9 @@ class Photometer:
 			airmass_list.append(airmass)
 			jd_list.append(jd)
 
-		plotter.plot_lightcurve(item, jd_list, inst_mag_list, inst_mag_error_list)
+		Plotter.plot_lightcurve(item, jd_list, inst_mag_list, inst_mag_error_list)
 
 		yfit, slope, intercept, delta_slope, delta_intercept = unweighted_fit(airmass_list, inst_mag_list)
-		plotter.plot_extinction(item, airmass_list, inst_mag_list, yfit)
+		Plotter.plot_extinction(item, airmass_list, inst_mag_list, yfit)
 
 		return slope, intercept, delta_slope, delta_intercept

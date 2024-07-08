@@ -29,8 +29,11 @@ class Priority:
 			field_list = pd.DataFrame(data=[['00.000', 90e0, 0e0, c.galactic.l.to_value(), c.galactic.b.to_value(), 'main_survey', 300., 1, 0, 0]], columns=['field_id', 'ra', 'dec', 'l', 'b', 'program', 'exposure_time', 'cadence', 'ephemeris', 'period'])
 
 			# set up the survey field of view
-			fov = Configuration.PIXEL_SIZE * Configuration.NUM_PIXELS / 3600.
-			field_number = int(np.ceil((90 + Configuration.DEC_LIMIT) / field_size))
+			cam_params = Utils.config_camera(Configuration.CAMERA)
+			obs_params = Utils.config_observatory(Configuration.OBSERVATORY)
+
+			fov = cam_params['pixel_size'] * cam_params['dx'] / 3600.
+			field_number = int(np.ceil((90 + obs_params['declination_limit']) / field_size))
 
 			# set up variables necessary for geometry
 			deg_to_rad = np.pi / 180.
@@ -113,8 +116,10 @@ class Priority:
 		# drop NaNs from catalog
 		df = df.dropna()
 
+		obs_params = Utils.config_observatory(Configuration.OBSERVATORY)
+
 		# slice catalog by declination
-		lim_dec = df.dec > (-90 + Configuration.LATITUDE)
+		lim_dec = df.dec > (-90 + obs_params['latitude'])
 		new_df = df[lim_dec]
 
 		# slice catalog by right ascension
@@ -129,7 +134,7 @@ class Priority:
 		alpha_obs_min = (sun.ra - horizon + min_height).degree
 		alpha_obs_max = (sun.ra + horizon - min_height).degree
 
-		circum = 90.0 - abs(new_df.dec) < abs(Configuration.LATITUDE)
+		circum = 90.0 - abs(new_df.dec) < abs(obs_params['latitude'])
 		alfa_min = new_df.ra > float(alpha_obs_min)
 		alfa_max = new_df.ra <= float(alpha_obs_max)
 

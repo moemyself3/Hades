@@ -1,8 +1,3 @@
-"""
-Plotter class
-
-"""
-
 from config import Configuration
 
 import matplotlib.pyplot as plt

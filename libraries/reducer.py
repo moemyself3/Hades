@@ -11,7 +11,6 @@ from photutils.detection import DAOStarFinder
 from photutils.segmentation import detect_threshold, detect_sources
 from photutils.utils import circular_footprint
 from reproject import reproject_interp
-
 import ccdproc
 import glob
 import numpy as np
