@@ -20,7 +20,7 @@ The settings are controlled in the `config.py` file.
 ### Example 1: Running the GCN listener
 
 ```
-$ python -m scripts.listener
+$ python -m scripts.gcn_listener
 ```
 
 ### Example 2: Running quick reduction on observational data
@@ -61,7 +61,7 @@ HADES was developed on a machine (`Epimetheus`) running Ubuntu 22.04.4 LTS and u
 ---
 
 7 Jun 2019<br>
-Last update: 5 Jul 2024
+Last update: 8 Jul 2024
 
 Richard Camuccio<br>
 rcamuccio@gmail.com
