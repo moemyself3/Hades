@@ -2,27 +2,24 @@ class Configuration:
 
 	WORKING_DIR = '/home/epimetheus/Downloads/2024-06-16/grb240615a/align/'
 	
-	MAIN_DIRECTORY = '/home/epimetheus/Downloads/hades/'
-	ALERTS_DIRECTORY = MAIN_DIRECTORY + 'alerts/'
-	ANALYSIS_DIRECTORY = MAIN_DIRECTORY + 'analysis/'
-	LOG_DIRECTORY = MAIN_DIRECTORY + 'logs/'
-	QUERIES_DIRECTORY = MAIN_DIRECTORY + 'queries/'
-	
+	MAIN_DIR = '/home/epimetheus/Downloads/hades-dev/'
+	CATALOG_DIR = '/home/epimetheus/Downloads/catalogs/'
+
 	OBJECT = 'grb240615a'
 	FIELD_RA = 326.1413
 	FIELD_DEC = 38.5948
 	
-	CAMERA = 'PL16803'	# PL16803, ST8300, TOROS
+	CAMERA = 'PL16803' # PL16803, ST8300, TOROS
 	MACHINE = 'epimetheus'
-	OBSERVATORY = 'CTMO'	# CTMO, Macon, OAFA
+	OBSERVATORY = 'CTMO' # CTMO, Macon, OAFA
 
-	FIELD_GENERATION = 'N'
 	FIELD_SIZE = 0.6
 
 	AIRMASS_METHOD = 'ky1998'
 	BKG_METHOD = 'flat'
 	BOX_SIZE = (50, 50)
 	CATALOG = 'gaia-cone'
+	CATALOG_TARGET = 'glade24' # glade24, glade+
 	CATALOG_F1 = 'r'
 	CATALOG_F2 = 'i'
 	COMBINE_METHOD = 'median'

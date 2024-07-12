@@ -12,6 +12,8 @@ consumer = Consumer(client_id=Configuration.CLIENT_ID,
 
 consumer.subscribe(Configuration.AVAILABLE_TOPICS)
 
+Utils.setup_hades(Configuration.MAIN_DIR)
+
 while True:
 
 	for message in consumer.consume(timeout=1):
@@ -26,5 +28,4 @@ while True:
 			Utils.log(message_value, 'info')
 
 		else:
-			Utils.log('Message from channel ' + message_topic + ' received!', 'info')
 			Router.route_alert(message_value, message_topic)

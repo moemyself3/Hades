@@ -21,7 +21,11 @@ class Priority:
 	@staticmethod
 	def field_generator(field_size):
 
-		if os.path.isfile(Configuration.ANALYSIS_DIRECTORY + 'survey_fields.dat') is False or Configuration.FIELD_GENERATION == 'Y':
+		survey_fields_path = Configuration.MAIN_DIR + 'analysis/survey/survey_fields.cat'
+		cam_params = Utils.config_camera(Configuration.CAMERA)
+		obs_params = Utils.config_observatory(Configuration.OBSERVATORY)
+
+		if os.path.isfile(survey_fields_path) is False:
 			Utils.log('Now generating survey fields.', 'info')
 
 			# set up the field data frames and start with the first field
@@ -29,15 +33,12 @@ class Priority:
 			field_list = pd.DataFrame(data=[['00.000', 90e0, 0e0, c.galactic.l.to_value(), c.galactic.b.to_value(), 'main_survey', 300., 1, 0, 0]], columns=['field_id', 'ra', 'dec', 'l', 'b', 'program', 'exposure_time', 'cadence', 'ephemeris', 'period'])
 
 			# set up the survey field of view
-			cam_params = Utils.config_camera(Configuration.CAMERA)
-			obs_params = Utils.config_observatory(Configuration.OBSERVATORY)
-
 			fov = cam_params['pixel_size'] * cam_params['dx'] / 3600.
 			field_number = int(np.ceil((90 + obs_params['declination_limit']) / field_size))
 
 			# set up variables necessary for geometry
 			deg_to_rad = np.pi / 180.
-			field_sep = fov * np.sqrt(2.2 ** 2 + 3.73 ** 2) / 5.0
+			field_sep = fov * np.sqrt(2.2**2 + 3.73**2) / 5.0
 
 			# separation of the fields in declination
 			declination_strips = 90 - np.arange(0, field_number) * field_sep
@@ -86,31 +87,40 @@ class Priority:
 					except AttributeError:
 						field_list = pd.concat([field_list, field.to_frame(1).T], ignore_index=True)
 
-			field_list.to_csv(Configuration.ANALYSIS_DIRECTORY + 'survey_fields.dat', sep=' ', header=True, index=False, float_format='%.3f')
+			field_list.to_csv(survey_fields_path, sep=' ', header=True, index=False, float_format='%.3f')
 
 		else:
 			# if the file exists already, then just read the field list in
-			field_list = pd.read_csv(Configuration.ANALYSIS_DIRECTORY + 'survey_fields.dat', header=0, sep=' ')
+			field_list = pd.read_csv(survey_fields_path, header=0, sep=' ')
 
 		return field_list
 
 	@staticmethod
 	def generate_targets(detection_time=None):
 
-		catalog = Configuration.ANALYSIS_DIRECTORY + 'GLADE+.txt'
-		delimiter = ' '
-		usecols = [2, 8, 9, 32]
-		header = None
-		names = ['GWGC', 'ra', 'dec', 'dist']
-		low_memory = False
+		if Configuration.CATALOG_TARGET == 'glade24':
 
-		Utils.log('Reading GLADE catalog.', 'info')
-		df = pd.read_csv(catalog,
-								delimiter=delimiter,
-								usecols=usecols,
-								header=header,
-								names=names,
-								low_memory=low_memory)
+			catalog = Configuration.CATALOG_DIR + 'GLADE_2.4.txt'
+			delimiter = ' '
+			usecols = [1, 6, 7, 8]
+			header = None
+			names = ['GWGC', 'ra', 'dec', 'dist']
+			low_memory = False
+
+			Utils.log('Reading GLADE 2.4 catalog.', 'info')
+
+		elif Configuration.CATALOG_TARGET == 'glade+':
+
+			catalog = Configuration.CATALOG_DIR + 'GLADE+.txt'
+			delimiter = ' '
+			usecols = [2, 8, 9, 32]
+			header = None
+			names = ['GWGC', 'ra', 'dec', 'dist']
+			low_memory = False
+
+			Utils.log('Reading GLADE+ catalog.', 'info')
+
+		df = pd.read_csv(catalog, delimiter=delimiter, usecols=usecols, header=header, names=names, low_memory=low_memory)
 
 		Utils.log('Slicing GLADE catalog.', 'info')
 		# drop NaNs from catalog

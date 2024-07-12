@@ -26,7 +26,15 @@ class Utils:
 
 		params = {}
 
-		if name == 'ST8300':
+		if name == 'PL16803':
+			dx = 4096
+			dy = 4096
+			gain = 0.72
+			inverse_gain = 1.39
+			pixel_size = 0.6305
+			read_noise = 11.4			
+
+		elif name == 'ST8300':
 			dx = 3352
 			dy = 2532
 			gain = 2.48
@@ -76,7 +84,13 @@ class Utils:
 
 		params = {}
 
-		if name == 'Macon':
+		if name == 'CTMO':
+			declination_limit = -40.00
+			elevation = 11.5
+			latitude = 25.995789
+			longitude = -97.568956
+
+		elif name == 'Macon':
 			declination_limit = 33.84
 			elevation = 4650
 			latitude = -24.62055556
@@ -94,11 +108,8 @@ class Utils:
 			latitude = 25.995789
 			longitude = -97.568956
 
-		elongitude = 360 - longitude
-
 		params['declination_limit'] = declination_limit
 		params['elevation'] = elevation
-		params['elongitude'] = elongitude
 		params['latitude'] = latitude
 		params['longitude'] = longitude
 
@@ -137,8 +148,10 @@ class Utils:
 	@staticmethod
 	def log(statement, level):
 
+		log_path = Configuration.MAIN_DIR + 'logs/main.log'
+
 		# create the logger
-		logging.basicConfig(format='%(asctime)s - %(levelname)s: %(message)s', filename=Configuration.LOG_DIRECTORY + 'main.log', filemode='a')
+		logging.basicConfig(format='%(asctime)s - %(levelname)s: %(message)s', filename=log_path, filemode='a')
 		logger = logging.getLogger()
 
 		if not getattr(logger, 'handler_set', None):
@@ -174,3 +187,61 @@ class Utils:
 
 		if level == 'critical':
 			logger.error(statement)
+
+	@staticmethod
+	def setup_hades(main_dir):
+
+		# alerts
+		alerts_dir = os.path.join(main_dir, 'alerts/')
+		if not os.path.exists(alerts_dir):
+			os.mkdir(alerts_dir)
+
+		# alerts > gw
+		alerts_gw_dir = os.path.join(alerts_dir, 'gw/')
+		if not os.path.exists(alerts_gw_dir):
+			os.mkdir(alerts_gw_dir)
+
+		# alerts > gw > json
+		alerts_gw_json_dir = os.path.join(alerts_gw_dir, 'json/')
+		if not os.path.exists(alerts_gw_json_dir):
+			os.mkdir(alerts_gw_json_dir)
+
+		# alerts > gw > moc
+		alerts_gw_moc_dir = os.path.join(alerts_gw_dir, 'moc/')
+		if not os.path.exists(alerts_gw_moc_dir):
+			os.mkdir(alerts_gw_moc_dir)
+
+		# alerts > gw > skymap
+		alerts_gw_skymap_dir = os.path.join(alerts_gw_dir, 'skymap/')
+		if not os.path.exists(alerts_gw_skymap_dir):
+			os.mkdir(alerts_gw_skymap_dir)
+
+		# analysis
+		analysis_dir = os.path.join(main_dir, 'analysis/')
+		if not os.path.exists(analysis_dir):
+			os.mkdir(analysis_dir)
+
+		# analysis > survey
+		analysis_survey_dir = os.path.join(analysis_dir, 'survey/')
+		if not os.path.exists(analysis_survey_dir):
+			os.mkdir(analysis_survey_dir)
+
+		# analysis > gw
+		analysis_gw_dir = os.path.join(analysis_dir, 'gw/')
+		if not os.path.exists(analysis_gw_dir):
+			os.mkdir(analysis_gw_dir)
+
+		# analysis > gw > fields
+		analysis_gw_fields_dir = os.path.join(analysis_gw_dir, 'fields/')
+		if not os.path.exists(analysis_gw_fields_dir):
+			os.mkdir(analysis_gw_fields_dir)
+
+		# analysis > gw > galaxies
+		analysis_gw_galaxies_dir = os.path.join(analysis_gw_dir, 'galaxies/')
+		if not os.path.exists(analysis_gw_galaxies_dir):
+			os.mkdir(analysis_gw_galaxies_dir)
+
+		# logs
+		log_dir = os.path.join(main_dir, 'logs/')
+		if not os.path.exists(log_dir):
+			os.mkdir(log_dir)

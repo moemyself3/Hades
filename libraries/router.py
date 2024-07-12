@@ -41,6 +41,61 @@ class Router:
 		return params
 
 	@staticmethod
+	def route_alert(value, topic):
+
+		Utils.log('Alert received from ' + topic + ' channel!', 'info')
+
+		# process LVK kafka
+		if topic == 'igwn.gwalert':
+			Router.igwn_gwalert(value)
+
+		# process IceCube kafka
+		elif topic == 'gcn.notices.icecube.lvk_nu_track_search':
+			Router.lvk_nu_track_search(value)
+
+		# process Swift kafka
+		elif topic == 'gcn.notices.swift.bat.guano':
+			Router.swift_bat_guano(value)
+
+		# process Fermi classic
+		elif topic == 'gcn.classic.text.FERMI_GBM_ALERT':
+			Router.process_fermi_classic_alert(value, topic)
+
+		elif topic == 'gcn.classic.text.FERMI_GBM_FIN_POS':
+			Router.process_fermi_classic_alert(value, topic)
+
+		elif topic == 'gcn.classic.text.FERMI_GBM_FLT_POS':
+			Router.process_fermi_classic_alert(value, topic)
+
+		elif topic == 'gcn.classic.text.FERMI_GBM_GND_POS':
+			Router.process_fermi_classic_alert(value, topic)
+
+		elif topic == 'gcn.classic.text.FERMI_GBM_POS_TEST':
+			Router.process_fermi_classic_alert(value, topic)
+
+		elif topic == 'gcn.classic.text.FERMI_GBM_SUBTHRESH':
+			Router.process_fermi_classic_alert(value, topic)
+
+		elif topic == 'gcn.classic.text.FERMI_POINTDIR':
+			Router.process_fermi_classic_alert(value, topic)
+
+		# process Swift classic
+		elif topic == 'gcn.classic.text.SWIFT_ACTUAL_POINTDIR':
+			Router.process_swift_classic_alert(value, topic)
+
+		elif topic == 'gcn.classic.text.SWIFT_BAT_GRB_POS_TEST':
+			Router.process_swift_classic_alert(value, topic)
+
+		elif topic == 'gcn.classic.text.SWIFT_POINTDIR':
+			Router.process_swift_classic_alert(value, topic)
+
+		# process unknown alert
+		else:
+			print(topic, type(topic))
+			params = Router.decode_classic_notice(value, verbose=True)
+			print(params)
+
+	@staticmethod
 	def process_fermi_classic_alert(value, topic):
 
 		params = Router.decode_classic_notice(value)
@@ -615,6 +670,363 @@ class Router:
 			print()
 
 	@staticmethod
+	def lvk_nu_track_search(value):
+
+		record = json.loads(value)
+			
+		alert_type = record['type']
+		reference = record['reference']
+		ref_id = record['ref_ID']
+		alert_datetime = record['alert_datetime']
+		trigger_time = record['trigger_time']
+		observation_start = record['observation_start']
+		observation_stop = record['observation_stop']
+		observation_livetime = record['observation_livetime']
+		pval_generic = record['pval_generic']
+		pval_bayesian = record['pval_bayesian']
+		n_events_coincident = record['n_events_coincident']
+		coincident_events = record['coincident_events']
+		most_probable_direction = record['most_probable_direction']
+		flux_sensitivity = record['neutrino_flux_sensitivity_range']['flux_sensitivity']
+		sensitive_energy_range = record['neutrino_flux_sensitivity_range']['sensitive_energy_range']
+
+		print('Alert Type:', alert_type, type(alert_type))
+		print('Reference:', reference, type(reference))
+		print('Ref ID:', ref_id, type(ref_id))
+		print('Alert Datetime:', alert_datetime, type(alert_datetime))
+		print('Trigger Time:', trigger_time, type(trigger_time))
+		print('Observation Start:', observation_start, type(observation_start))
+		print('Observation Stop:', observation_stop, type(observation_stop))
+		print('Observation Livetime:', observation_livetime, type(observation_livetime))
+		print('pval Generic:', pval_generic, type(pval_generic))
+		print('pval Bayesian:', pval_bayesian, type(pval_bayesian))
+		print('n Events Coincident:', n_events_coincident, type(n_events_coincident))
+		print('Coincident Events:', coincident_events, type(coincident_events), len(coincident_events))
+		print('Most Probable Direction:', most_probable_direction, type(most_probable_direction))
+		print('Flux Sensitivity:', flux_sensitivity, type(flux_sensitivity))
+		print('Sensitive Energy Range:', sensitive_energy_range, type(sensitive_energy_range))
+		print()
+
+	@staticmethod
+	def swift_bat_guano(value):
+
+		record = json.loads(value)
+
+		mission = record['mission']
+		instrument = record['instrument']
+		messenger = record['messenger']
+		record_number = record['record_number']
+		alert_datetime = record['alert_datetime']
+		alert_tense = record['alert_tense']
+		alert_type = record['alert_type']
+		trigger_time = record['trigger_time']
+		follow_up_event = record['follow_up_event']
+		follow_up_type = record['follow_up_type']
+		data_archive_page = record['data_archive_page']
+		alert_id = record['id']
+
+		Utils.log('Event BAT-GUANO/' + follow_up_event + ' generated at time ' + str(alert_datetime) + '.', 'info')
+		Utils.log('Data Archive Page: ' + str(data_archive_page) + '.', 'info')
+
+		# 1 - guano.example.json
+		if record_number == 1:
+			Utils.log('This is a BAT-GUANO (standard) alert for event ' + follow_up_event + '.', 'info')
+
+			rate_snr = record['rate_snr']
+			rate_duration = record['rate_duration']
+			rate_energy_range = record['rate_energy_range']
+			classification = record['classification']
+			far = record['far']
+		
+		# 2 - guano.loc_map.example.json
+		if record_number == 2:
+			Utils.log('This is a BAT-GUANO (loc_map) alert for event ' + follow_up_event + '.', 'info')
+
+			healpix_file = record['healpix_file']
+			systematic_included = record['systematic_included']
+			rate_snr = record['rate_snr']
+			rate_duration = record['rate_duration']
+			rate_energy_range = record['rate_energy_range']
+			classification = record['classification']
+			far = record['far']
+
+		# 3 - guano.loc_arc_min.example.json
+		elif record_number == 3:
+			Utils.log('This is a BAT-GUANO (loc_arc_min) alert for event ' + follow_up_event + '.', 'info')
+
+			ra = record['ra']
+			dec = record['dec']
+			ra_dec_error = record['ra_dec_error']
+			containment_probability = record['containment_probability']
+			systematic_included = record['systematic_included']
+			image_snr = record['image_snr']
+			image_duration = record['image_duration']
+			image_energy_range = record['image_energy_range']
+			rate_snr = record['rate_snr']
+			rate_duration = record['rate_duration']
+			rate_energy_range = record['rate_energy_range']
+			classification = record['classification']
+			far = record['far']
+
+		# 4 - guano.retraction
+		elif record_number == 4:
+			Utils.log('BAT-GUANO alert for event ' + follow_up_event + ' was retracted!', 'info')
+
+		else:
+			print('Could not read BAT-GUANO notice.')
+			print(topic)
+			print(value)
+
+	@staticmethod
+	def igwn_gwalert(value):
+
+		record = json.loads(value)
+
+		superevent_id = record['superevent_id']
+		time_created = record['time_created']
+		url = record['urls']['gracedb']
+
+		Utils.log('Event ' + str(superevent_id) + ' generated at time ' + str(time_created) + '.', 'info')
+		Utils.log('GraceDB URL: ' + str(url) + '.', 'info')
+
+		rm_filter = superevent_id[0]
+
+		if (rm_filter == 'M') or (rm_filter == 'T'):
+			Utils.log('This is a MOCK event!', 'info')
+
+		elif rm_filter == 'S':
+			Utils.log('This is a REAL event!', 'info')
+
+		else:
+			Utils.log('This is an UNKNOWN event (rb_filter == ' + str(rb_filter) + ').', 'info')
+
+		field_path = Configuration.MAIN_DIR + 'analysis/gw/fields/' + superevent_id + '-fields.txt'
+		galaxy_path = Configuration.MAIN_DIR + 'analysis/gw/galaxies/' + superevent_id + '-galaxies.txt'
+		json_path = Configuration.MAIN_DIR + 'alerts/gw/json/' + superevent_id + '.json'
+		moc_path = Configuration.MAIN_DIR + 'alerts/gw/moc/' + superevent_id + '-90percent.moc.fit'
+		skymap_path = Configuration.MAIN_DIR + 'alerts/gw/skymap/' + superevent_id + '-skymap.fit'
+
+		# save json
+		if not os.path.isfile(json_path):
+			with open(json_path, 'w') as outfile:
+				json.dump(record, outfile)
+				Utils.log('Saving JSON for ' + superevent_id + '.', 'info')
+		else:
+			Utils.log('JSON already saved for ' + superevent_id + '.', 'info')
+
+		alert_type = record['alert_type']
+
+		# filter alert type
+		if alert_type == 'RETRACTION':
+			Utils.log('Alert for ' + superevent_id + ' was retracted!', 'info')
+
+			if os.path.isfile(field_path):
+				Utils.log('Deleting fields for retracted alert ' + superevent_id + '.', 'info')
+				os.system('rm ' + field_path)
+			else:
+				Utils.log('No fields for ' + superevent_id + ' to delete.', 'info')
+
+			if os.path.isfile(galaxy_path):
+				Utils.log('Deleting galaxies for retracted alert ' + superevent_id + '.', 'info')
+				os.system('rm ' + galaxy_path)
+			else:
+				Utils.log('No galaxies for ' + superevent_id + ' to delete.', 'info')
+
+			if os.path.isfile(json_path):
+				Utils.log('Deleting JSON for retracted alert ' + superevent_id + '.', 'info')
+				os.system('rm ' + json_path)
+			else:
+				Utils.log('No JSON for ' + superevent_id + ' to delete.', 'info')
+
+			if os.path.isfile(skymap_path):
+				Utils.log('Deleting skymap for ' + superevent_id + '.', 'info')
+				os.system('rm ' + skymap_path)
+			else:
+				Utils.log('No skymap for ' + superevent_id + ' to delete.', 'info')
+
+			if os.path.isfile(moc_path):
+				Utils.log('Deleting 90 percent credible region for ' + superevent_id + '.', 'info')
+				os.system('rm ' + moc_path)
+			else:
+				Utils.log('No 90 percent credible region for ' + superevent_id + ' to delete.', 'info')
+
+			#Utils.log('Alerting team of retraction.', 'info')
+			#Alerts.alert_team(alert_type=alert_type, event_name=superevent_id)
+
+		elif (alert_type == 'PRELIMINARY') or (alert_type == 'INITIAL') or (alert_type == 'UPDATE'):
+			Utils.log('This is a ' + alert_type + ' alert for ' + superevent_id + '!', 'info')
+
+			#Utils.log('Alerting team of event.', 'info')
+			#Alerts.alert_team(alert_type=alert_type, event_name=superevent_id)
+
+			Utils.log('Reading event parameters and skymap.', 'info')
+
+			time = record['event']['time'] # string
+			far = record['event']['far'] # float
+			significant = record['event']['significant'] # bool
+			instruments = record['event']['instruments'] # list
+
+			pipeline = record['event']['pipeline'] # string
+			search = record['event']['search'] # string
+
+			print('Time:', time)
+			print('FAR:', far)
+			print('Significant:', significant)
+			print('Instruments:', instruments)
+			print('Pipeline:', pipeline)
+			print('Search:', search)
+			print('--------------------')
+			
+			group = record['event']['group'] # string
+
+			if group == 'Burst':
+
+				Utils.log('This is a burst event!', 'info')
+
+				duration = record['event']['duration'] # 
+				central_frequency = record['event']['central_frequency'] # 
+
+				print('Duration:', duration, type(duration))
+				print('Central frequency:', central_frequency, type(central_frequency))
+				print('--------------------')
+
+			elif group == 'CBC':
+
+				Utils.log('This is a merger event!', 'info')
+
+				has_ns = record['event']['properties']['HasNS'] # float
+				has_remnant = record['event']['properties']['HasRemnant'] # float
+				has_mass_gap = record['event']['properties']['HasMassGap'] # float
+
+				bns_class = record['event']['classification']['BNS'] # float
+				nsbh_class = record['event']['classification']['NSBH'] # float
+				bbh_class = record['event']['classification']['BBH'] # float
+				terra_class = record['event']['classification']['Terrestrial'] # float
+
+				print('HasNS:', has_ns)
+				print('HasRemnant:', has_remnant)
+				print('HasMassGap:', has_mass_gap)
+				print('--------------------')
+				print('BNS Classification:', bns_class)
+				print('NSBH Classification:', nsbh_class)
+				print('BBH Classification:', bbh_class)
+				print('Terra Classification:', terra_class)
+				print('--------------------')
+
+			skymap_str = record.get('event', {}).pop('skymap')
+
+			if skymap_str:
+
+				skymap_bytes = b64decode(skymap_str)
+
+				buffer = BytesIO(skymap_bytes)
+
+				skymap = QTable.read(buffer)
+
+				hdr_object = skymap.meta['OBJECT'] # unique identifier for this event
+				hdr_date = skymap.meta['DATE-OBS'] # UTC of observation
+				hdr_mjd = skymap.meta['MJD-OBS'] # MJD of observation
+
+				try:
+					hdr_distmean = skymap.meta['DISTMEAN'] # posterior mean distance [Mpc]
+				except KeyError:
+					print('Could not read DISTMEAN')
+
+				try:
+					hdr_diststd = skymap.meta['DISTSTD'] # posterior std distance [Mpc]
+				except KeyError:
+					print('Could not read DISTSTD')
+					
+				# most probable sky location
+				i = np.argmax(skymap['PROBDENSITY'])
+				uniq = skymap[i]['UNIQ']
+
+				level, ipix = ah.uniq_to_level_ipix(uniq)
+				nside = ah.level_to_nside(level)
+
+				ra, dec = ah.healpix_to_lonlat(ipix, nside, order='nested')
+				ra_max = ra.deg
+				dec_max = dec.deg
+
+				# sort the pixels of the skymap by descending probability density
+				skymap.sort('PROBDENSITY', reverse=True)
+
+				# find the area of each pixel
+				level, ipix	= ah.uniq_to_level_ipix(skymap['UNIQ'])
+				pixel_area = ah.nside_to_pixel_area(ah.level_to_nside(level))
+
+				# calculate the probability within each pixel: pixel area times probability density
+				prob = pixel_area * skymap['PROBDENSITY']
+
+				# calculate the cumulative sum of the probability
+				cumprob = np.cumsum(prob)
+
+				# find the pixel for which the probability sums to 0.9
+				i = cumprob.searchsorted(0.9)
+
+				# calculate the area of the 90 percent credible region: sum of the areas of the pixels up to that one
+				area_90 = pixel_area[:i].sum()
+				area_90.to_value(u.deg**2)
+
+				# save skymap to FITS
+				if not os.path.isfile(skymap_path):
+					Utils.log('Saving skymap for event ' + superevent_id + '.', 'info')
+					skymap.write(skymap_path, overwrite=True)
+
+				else:
+					Utils.log('Skymap already saved for ' + superevent_id + '.', 'info')
+
+				# save 90 percent credible region to FITS
+				if not os.path.isfile(moc_path):
+					Utils.log('Saving 90 percent credible region for event ' + superevent_id + '.', 'info')
+
+					# keep only the pixels that are within the 90 percent credible region
+					skymap90 = skymap[:i]
+
+					# sort the pixels by their UNIQ pixel index
+					skymap90.sort('UNIQ')
+
+					# delete all columns except for the UNIQ column
+					skymap90 = skymap90['UNIQ',]
+					skymap90.write(moc_path, overwrite=True)
+
+				else:
+					Utils.log('MOC 90 percent credible region already saved for ' + superevent_id + '.', 'info')
+
+			# check to see if the field list from the skymap exists
+			if not os.path.isfile(field_path):
+				Utils.log('Generating field list from skymap for ' + superevent_id + '.', 'info')
+
+				# pull in the survey fields
+				survey_fields = Priority.field_generator(Configuration.FIELD_SIZE)
+
+				# generate a ranked list of fields within the skymap
+				fields_prio = Priority.sort_field_skymap(survey_fields, skymap, superevent_id)
+				fields_prio.to_csv(field_path, sep=' ', index=False)
+
+			else:
+				Utils.log('Field list already generated from skymap for ' + superevent_id + '.', 'info')
+
+			# check to see if the galaxy list from the skymap exists
+			if not os.path.isfile(galaxy_path):
+				Utils.log('Generating galaxy list from skymap for ' + superevent_id + '.', 'info')
+
+				# pull in the survey fields
+				survey_fields = Priority.field_generator(Configuration.FIELD_SIZE)
+
+				# pull in the galaxy catalog
+				catalog = Priority.generate_targets(detection_time=None)
+
+				# generated a ranked list of galaxies within the skymap
+				galaxies_prio = Priority.sort_galaxy_skymap(catalog, skymap, superevent_id)
+				galaxies_prio.to_csv(galaxy_path, sep=' ', index=False)
+
+			else:
+				Utils.log('Galaxy list already generated from skymap for ' + superevent_id + '.', 'info')
+
+			print()		
+
+	@staticmethod
 	def process_kafka_alert(value, topic):
 
 		if topic == 'igwn.gwalert':
@@ -973,55 +1385,3 @@ class Router:
 				print('Could not read BAT-GUANO notice.')
 				print(topic)
 				print(value)
-
-	@staticmethod
-	def route_alert(value, topic):
-
-		# process LVK kafka
-		if topic == 'igwn.gwalert':
-			Router.process_kafka_alert(value, topic)
-
-		# process IceCube kafka
-		elif topic == 'gcn.notices.icecube.lvk_nu_track_search':
-			Router.process_kafka_alert(value, topic)
-
-		# process Swift kafka
-		elif topic == 'gcn.notices.swift.bat.guano':
-			Router.process_kafka_alert(value, topic)
-
-		# process Fermi classic
-		elif topic == 'gcn.classic.text.FERMI_GBM_ALERT':
-			Router.process_fermi_classic_alert(value, topic)
-
-		elif topic == 'gcn.classic.text.FERMI_GBM_FIN_POS':
-			Router.process_fermi_classic_alert(value, topic)
-
-		elif topic == 'gcn.classic.text.FERMI_GBM_FLT_POS':
-			Router.process_fermi_classic_alert(value, topic)
-
-		elif topic == 'gcn.classic.text.FERMI_GBM_GND_POS':
-			Router.process_fermi_classic_alert(value, topic)
-
-		elif topic == 'gcn.classic.text.FERMI_GBM_POS_TEST':
-			Router.process_fermi_classic_alert(value, topic)
-
-		elif topic == 'gcn.classic.text.FERMI_GBM_SUBTHRESH':
-			Router.process_fermi_classic_alert(value, topic)
-
-		elif topic == 'gcn.classic.text.FERMI_POINTDIR':
-			Router.process_fermi_classic_alert(value, topic)
-
-		# process Swift classic
-		elif topic == 'gcn.classic.text.SWIFT_ACTUAL_POINTDIR':
-			Router.process_swift_classic_alert(value, topic)
-
-		elif topic == 'gcn.classic.text.SWIFT_BAT_GRB_POS_TEST':
-			Router.process_swift_classic_alert(value, topic)
-
-		elif topic == 'gcn.classic.text.SWIFT_POINTDIR':
-			Router.process_swift_classic_alert(value, topic)
-
-		# process unknown alert
-		else:
-			print(topic, type(topic))
-			Router.decode_classic_notice(value, verbose=True)

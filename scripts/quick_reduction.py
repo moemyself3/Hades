@@ -1,38 +1,31 @@
 from config import Configuration
-from libraries.reducer import *
-from libraries.utils import *
+from libraries.router import Router
+from libraries.utils import Utils
 
-import os
-import time
+from gcn_kafka import Consumer
 
-import warnings
-from astropy.utils.exceptions import AstropyWarning
-warnings.simplefilter('ignore', category=AstropyWarning)
+import logging
+logging.getLogger('gcn').setLevel(logging.WARNING)
 
-os.system('clear')
-print('Running quick reduction')
-start_time = time.time()
+consumer = Consumer(client_id=Configuration.CLIENT_ID,
+					client_secret=Configuration.CLIENT_SECRET)
 
-reducer = Reducer()
-utils = Utils()
+consumer.subscribe(Configuration.AVAILABLE_TOPICS)
 
-dark_dir = os.path.join(Configuration.WORKING_DIR, 'dark')
-dark_flat_dir = os.path.join(dark_dir, 'flat')
-dark_light_dir = os.path.join(dark_dir, 'light')
-flat_dir = os.path.join(Configuration.WORKING_DIR, 'flat')
-light_dir = os.path.join(Configuration.WORKING_DIR, Configuration.OBJECT)
+Utils.setup_hades(Configuration.MAIN_DIR)
 
-raw_dir, cal_dir, wcs_dir, align_dir = utils.create_directories(light_dir)
+while True:
 
-reducer.make_dark(dark_flat_dir)
-reducer.make_dark(dark_light_dir)
-reducer.make_flat(flat_dir, dark_flat_dir)
-reducer.reduce_objects(light_dir, flat_dir, dark_light_dir, bkg_method=Configuration.BKG_METHOD)
-reducer.solve_plates(light_dir)
-reducer.align_frames(light_dir)
-reducer.make_stack(light_dir)
+	for message in consumer.consume(timeout=1):
 
-end_time = time.time()
-total_time = end_time - start_time
-print()
-print('Script ended in', '%.1f' % total_time, 'seconds')
+		message_error = message.error()
+		message_topic = message.topic()
+		message_value = message.value()
+
+		if message_error:
+			Utils.log(message_error, 'info')
+			Utils.log(message_topic, 'info')
+			Utils.log(message_value, 'info')
+
+		else:
+			Router.route_alert(message_value, message_topic)
