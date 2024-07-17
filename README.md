@@ -60,6 +60,20 @@ The quick reduction script is run on a single night (yyyy-mm-dd) of data, assumi
 
 HADES was developed on a machine (`Epimetheus`) running Ubuntu 22.04.4 LTS and using an Anaconda environment with Python 3.12.3. The list of library requirements are listed in the the `requirements.txt` file in the main directory.
 
+#### Testing
+
+Test from the main HADES directory using `pytest` using
+
+```
+python -m pytest
+```
+
+To see captured output generated during the test session run
+
+```
+python -m pytest -s
+```
+
 ### GCN Subscription
 
 One requires an account on the NASA General Coordinates Network (GCN) platform (https://gcn.nasa.gov). The parameters `client_id` and `client_secret` are uniquely generated per user, and must be plugged into the configuration file in order to use the GCN listener.
