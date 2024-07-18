@@ -80,20 +80,3 @@ def example_header_with_wcs():
 def example_hdu():
     hdu = fits.PrimaryHDU(example_ccd_data(), example_header_with_wcs())
     return hdu
-
-def show_files(path):
-    print(f"Scanning Directory: {path}")
-    with os.scandir(path) as iterable_items:
-        print("Name\t\tType")
-        for entry in iterable_items:
-            if entry.is_file():
-                entry_type = "file"
-                print(f"{entry.name}\t{entry_type}")
-            
-            if entry.is_dir():
-                entry_type = "dir"
-                print(f"{entry.name}\t\t{entry_type}")
-                with os.scandir(path / entry.name ) as iterable_dir:
-                    for subfile in iterable_dir:
-                        print(f" |-> {subfile.name}")
-
