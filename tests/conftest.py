@@ -32,15 +32,25 @@ def helper():
 
 @pytest.fixture(scope="session")
 def obj_dir(tmp_path_factory):
-    fit_files_path = tmp_path_factory.mktemp("data")
     # Make directories for fit files
-    #  needs data, wcs, and align
+    #  needs data, wcs, align, dark, raw, cal
+
+    fit_files_path = tmp_path_factory.mktemp("data")
+    
     wcs_path = fit_files_path / "wcs"
     wcs_path.mkdir()
+    
     align_path = fit_files_path / "align"
     align_path.mkdir()
+    
     dark_path = fit_files_path / "dark"
     dark_path.mkdir()
+    
+    raw_path = fit_files_path / "raw"
+    raw_path.mkdir()
+
+    cal_path = fit_files_path / "cal"
+    cal_path.mkdir()
 
     # Make fit file data
     hdu = example_hdu()
@@ -62,8 +72,9 @@ def dark_dir(obj_dir):
     return obj_dir
 
 @pytest.fixture(scope="session")
-def object_frame():
-    return example_hdu()
+def object_frame(obj_dir):
+    object_frame_path = obj_dir / 'ccd-0.fit'
+    return object_frame_path
 
 def example_ccd_data():
     return CCDData(np.random.rand(2,2), unit="adu")

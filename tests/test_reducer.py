@@ -1,9 +1,9 @@
 import pytest
 import os
 import astropy
+import numpy as np
 
 from pathlib import Path
-
 from libraries.reducer import Reducer
 
 def test_align_frames_bad_path():
@@ -26,13 +26,15 @@ def test_make_flat(flat_dir, dark_dir, helper):
     helper.show_files(flat_dir)
 
 def test_make_mask(object_frame):
-    pass
+    mask, boxes = Reducer.make_mask(object_frame)
+    assert isinstance(mask, np.ndarray)
+    assert isinstance(boxes, dict)
 
 def test_make_stack(obj_dir):
-    pass
+    assert isinstance(Reducer.make_stack(obj_dir), astropy.nddata.CCDData)
 
 def test_reduce_objects(obj_dir, flat_dir, dark_dir, bkg_method='flat'):
-    pass
+    assert isinstance(Reducer.reduce_objects(obj_dir, flat_dir, dark_dir,  bkg_method), list)
 
 def test_solve_plates(obj_dir):
-    pass
+    assert isinstance(Reducer.solve_plates(obj_dir), list)
