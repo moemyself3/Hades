@@ -37,6 +37,7 @@ class Configuration:
 	RAD_QUERY = 1
 	SIGMA_BKG = 3.0
 	SIGMA_SRC = 5.0
+	SIGMA = 5.0
 
 	CLIENT_ID = 'client_id'
 	CLIENT_SECRET = 'client_secret'
