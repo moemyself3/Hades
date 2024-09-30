@@ -27,9 +27,9 @@ else:
 # horizontal
 horizontal_taps = 8
 tap_width = 1320
-overscan_width = 180 #per tap
+overscan_width = 180 # per tap
 tap_height = 5280
-overscan_height = 20 #per tap
+overscan_height = 20 # per tap
 xstart = []
 ystart = []
 xend = []
@@ -77,16 +77,15 @@ with fits.open('./bias.fits') as hdu:
 # Loop through the image file collection
 for image, fname in ifc.hdus(return_fname=True):
     data = CCDData(image.data, unit=u.adu)
-    
-    #Bias Subtract
+
+    # Bias Subtract
     bias_subtracted = subtract_bias(data, bias)
 
-    #Trim
-    #trimmed = np.delete(np.delete(bias_subtracted, ~np.r_[xdata_slice_list], axis=1), ~np.r_[ydata_slice_list], axis=0)
+    # Trim
     trimmed = bias_subtracted[:, np.r_[xdata_slice_list]]
     trimmed = trimmed[np.r_[ydata_slice_list], :]
     trimmed = CCDData(trimmed, unit=u.adu)
-    
+
     # Save new image
-    filename = './trimmed/' +'trimmed_'+ str(fname)
+    filename = './trimmed/' + 'trimmed_' + str(fname)
     trimmed.write(filename)
